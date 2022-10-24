@@ -21,7 +21,27 @@ function setLocalStorage(booksList) {
   localStorage.setItem('formInputs', JSON.stringify(booksList));
 }
 function getLocalStorage() {
-  return JSON.parse(localStorage.getItem('formInputs'));
+    if(localStorage.getItem('formInputs'));
+        return JSON.parse(localStorage.getItem('formInputs'));
+    return [];
 }
 
 const booksList = getLocalStorage();
+
+function displaybooks(book){
+    const maindiv = document.createElement('div');
+    const h2 = document.createElement('h2');
+    const p = document.createElement('p');
+    const removeButton = document.createElement('button');
+    h2.innerHTML=book.title;
+    p.innerHTML=book.author;
+    removeButton.innerHTML = `remove`;
+    maindiv.appendChild(h2);
+    maindiv.appendChild(p);
+    maindiv.appendChild(removeButton);
+    container.appendChild(maindiv);
+
+}
+for(let i=0; i<booksList.length; i++){
+    displaybooks(booksList[i]);
+};

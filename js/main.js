@@ -3,6 +3,40 @@ const author = document.querySelector('#author');
 const submitButton = document.querySelector('#submit');
 const container = document.querySelector('#books-container');
 
+function setLocalStorage(booksList) {
+  localStorage.setItem('formInputs', JSON.stringify(booksList));
+}
+function getLocalStorage() {
+  if (localStorage.getItem('formInputs') !== null) {
+    return JSON.parse(localStorage.getItem('formInputs'));
+  }
+  return [];
+}
+const booksList = getLocalStorage();
+
+function displaybooks(books) {
+  container.innerHTML = '';
+  for (let i = 0; i < books.length; i += 1) {
+    const book = books[i];
+    const maindiv = document.createElement('div');
+    const h2 = document.createElement('h2');
+    const p = document.createElement('p');
+    const removeButton = document.createElement('button');
+    removeButton.addEventListener('click', () => {
+      booksList.splice(i, 1);
+      setLocalStorage(booksList);
+      displaybooks(booksList);
+    });
+    h2.innerHTML = book.title;
+    p.innerHTML = book.author;
+    removeButton.innerHTML = 'remove';
+    maindiv.appendChild(h2);
+    maindiv.appendChild(p);
+    maindiv.appendChild(removeButton);
+    container.appendChild(maindiv);
+  }
+}
+displaybooks(booksList);
 
 submitButton.addEventListener('click', (e) => {
   e.preventDefault();
@@ -13,35 +47,6 @@ submitButton.addEventListener('click', (e) => {
     };
     booksList.push(list);
     setLocalStorage(booksList);
-    console.log(getLocalStorage());
+    displaybooks(booksList);
   }
 });
-
-function setLocalStorage(booksList) {
-  localStorage.setItem('formInputs', JSON.stringify(booksList));
-}
-function getLocalStorage() {
-    if(localStorage.getItem('formInputs'));
-        return JSON.parse(localStorage.getItem('formInputs'));
-    return [];
-}
-
-const booksList = getLocalStorage();
-
-function displaybooks(book){
-    const maindiv = document.createElement('div');
-    const h2 = document.createElement('h2');
-    const p = document.createElement('p');
-    const removeButton = document.createElement('button');
-    h2.innerHTML=book.title;
-    p.innerHTML=book.author;
-    removeButton.innerHTML = `remove`;
-    maindiv.appendChild(h2);
-    maindiv.appendChild(p);
-    maindiv.appendChild(removeButton);
-    container.appendChild(maindiv);
-
-}
-for(let i=0; i<booksList.length; i++){
-    displaybooks(booksList[i]);
-};

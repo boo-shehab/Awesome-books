@@ -14,18 +14,17 @@ class Books {
       container.innerHTML = '';
       for (let i = 0; i < this.booksArray.length; i += 1) {
         const maindiv = document.createElement('div');
-        
+        if (i % 2 === 0) {
+          maindiv.classList.add('gray');
+        }
+
         const p = document.createElement('p');
         const removeButton = document.createElement('button');
-        removeButton.addEventListener('click', () => {
-          this.booksArray.splice(i, 1);
-          this.setLocalStorage(this.booksArray);
-          this.displaybooks(this.booksArray);
-        });
-        
+        removeButton.addEventListener('click', () => this.remove(i));
+
         p.innerHTML = `"${this.booksArray[i].title}" "${this.booksArray[i].author}"`;
         removeButton.innerHTML = 'remove';
-        
+
         maindiv.appendChild(p);
         maindiv.appendChild(removeButton);
         container.appendChild(maindiv);
@@ -39,13 +38,19 @@ class Books {
     getLocalStorage() {
       if (localStorage.getItem('formInputs') !== null) {
         this.booksArray = JSON.parse(localStorage.getItem('formInputs'));
-      }else{
+      } else {
         this.booksArray = [];
       }
     }
 
     add(list) {
       this.booksArray.push(list);
+    }
+
+    remove(id) {
+      this.booksArray.splice(id, 1);
+      this.setLocalStorage();
+      this.displaybooks();
     }
 }
 

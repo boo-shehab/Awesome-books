@@ -14,7 +14,7 @@ class Books {
       container.innerHTML = '';
       for (let i = 0; i < this.booksArray.length; i += 1) {
         const maindiv = document.createElement('div');
-        const h2 = document.createElement('h2');
+        
         const p = document.createElement('p');
         const removeButton = document.createElement('button');
         removeButton.addEventListener('click', () => {
@@ -22,10 +22,10 @@ class Books {
           this.setLocalStorage(this.booksArray);
           this.displaybooks(this.booksArray);
         });
-        h2.innerHTML = this.booksArray[i].title;
-        p.innerHTML = this.booksArray[i].author;
+        
+        p.innerHTML = `"${this.booksArray[i].title}" "${this.booksArray[i].author}"`;
         removeButton.innerHTML = 'remove';
-        maindiv.appendChild(h2);
+        
         maindiv.appendChild(p);
         maindiv.appendChild(removeButton);
         container.appendChild(maindiv);

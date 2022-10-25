@@ -3,40 +3,59 @@ const author = document.querySelector('#author');
 const submitButton = document.querySelector('#submit');
 const container = document.querySelector('#books-container');
 
-function setLocalStorage(booksList) {
-  localStorage.setItem('formInputs', JSON.stringify(booksList));
-}
-function getLocalStorage() {
-  if (localStorage.getItem('formInputs') !== null) {
-    return JSON.parse(localStorage.getItem('formInputs'));
-  }
-  return [];
-}
-const booksList = getLocalStorage();
+class Books {
+    booksArray
 
-function displaybooks(books) {
-  container.innerHTML = '';
-  for (let i = 0; i < books.length; i += 1) {
-    const book = books[i];
-    const maindiv = document.createElement('div');
-    const h2 = document.createElement('h2');
-    const p = document.createElement('p');
-    const removeButton = document.createElement('button');
-    removeButton.addEventListener('click', () => {
-      booksList.splice(i, 1);
-      setLocalStorage(booksList);
-      displaybooks(booksList);
-    });
-    h2.innerHTML = book.title;
-    p.innerHTML = book.author;
-    removeButton.innerHTML = 'remove';
-    maindiv.appendChild(h2);
-    maindiv.appendChild(p);
-    maindiv.appendChild(removeButton);
-    container.appendChild(maindiv);
-  }
+    constructor() {
+      this.getLocalStorage();
+    }
+
+    displaybooks() {
+      container.innerHTML = '';
+      for (let i = 0; i < this.booksArray.length; i += 1) {
+        const maindiv = document.createElement('div');
+        if (i % 2 === 0) {
+          maindiv.classList.add('gray');
+        }
+
+        const p = document.createElement('p');
+        const removeButton = document.createElement('button');
+        removeButton.addEventListener('click', () => this.remove(i));
+
+        p.innerHTML = `"${this.booksArray[i].title}" "${this.booksArray[i].author}"`;
+        removeButton.innerHTML = 'remove';
+
+        maindiv.appendChild(p);
+        maindiv.appendChild(removeButton);
+        container.appendChild(maindiv);
+      }
+    }
+
+    setLocalStorage() {
+      localStorage.setItem('formInputs', JSON.stringify(this.booksArray));
+    }
+
+    getLocalStorage() {
+      if (localStorage.getItem('formInputs') !== null) {
+        this.booksArray = JSON.parse(localStorage.getItem('formInputs'));
+      } else {
+        this.booksArray = [];
+      }
+    }
+
+    add(list) {
+      this.booksArray.push(list);
+    }
+
+    remove(id) {
+      this.booksArray.splice(id, 1);
+      this.setLocalStorage();
+      this.displaybooks();
+    }
 }
-displaybooks(booksList);
+
+const books = new Books();
+books.displaybooks();
 
 submitButton.addEventListener('click', (e) => {
   e.preventDefault();
@@ -45,8 +64,8 @@ submitButton.addEventListener('click', (e) => {
       title: bookTitle.value,
       author: author.value,
     };
-    booksList.push(list);
-    setLocalStorage(booksList);
-    displaybooks(booksList);
+    books.add(list);
+    books.setLocalStorage();
+    books.displaybooks(books);
   }
 });

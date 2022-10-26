@@ -2,6 +2,9 @@ const bookTitle = document.querySelector('#title');
 const author = document.querySelector('#author');
 const submitButton = document.querySelector('#submit');
 const container = document.querySelector('#books-container');
+const form = document.querySelector('form');
+const contact = document.querySelector('#contact');
+const booksList = document.querySelector('#books-list');
 
 class Books {
     booksArray
@@ -69,3 +72,30 @@ submitButton.addEventListener('click', (e) => {
     books.displaybooks(books);
   }
 });
+
+// eslint-disable-next-line no-unused-vars
+function showContent(id) {
+  document.querySelectorAll('header ul li').forEach((ele) => ele.classList.remove('active'));
+  id.classList.add('active');
+  switch (id.getAttribute('data-link')) {
+    case 'list':
+      booksList.style.display = 'block';
+      form.style.display = 'none';
+      contact.style.display = 'none';
+      break;
+    case 'add-new':
+      booksList.style.display = 'none';
+      form.style.display = 'flex';
+      contact.style.display = 'none';
+      break;
+    case 'contact':
+      booksList.style.display = 'none';
+      form.style.display = 'none';
+      contact.style.display = 'block';
+      break;
+    default:
+      booksList.style.display = 'block';
+      form.style.display = 'none';
+      contact.style.display = 'none';
+  }
+}
